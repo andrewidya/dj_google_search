@@ -69,6 +69,18 @@ class SearchResult(models.Model):
     def __str__(self):
         return f"title: {self.title}, url: {self.url}"
 
+    @property
+    def request_user(self):
+        return self.request_session.request_user
+
+    @property
+    def keyword(self):
+        return self.request_session.keyword
+
+    @property
+    def request_date(self):
+        return self.request_session.created
+
     class Meta:
         verbose_name = _("Search Result")
         verbose_name_plural = _("Search Result List")
