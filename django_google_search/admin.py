@@ -18,7 +18,9 @@ class RequestSessionAdmin(admin.ModelAdmin):
 
 
 class SearchResultAdmin(ExportActionModelAdmin):
-    list_display = ['title', 'summary', 'request_session']
+    list_display = ['title', 'summary', 'keyword', 'request_user', 'request_date']
+    list_filter = ['request_session__request_user', 'request_session__created']
+    search_fields = ['request_session__keyword', 'title', 'summary']
 
     def has_add_permission(self, request):
         return False
