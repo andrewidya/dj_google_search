@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from import_export.admin import ExportActionModelAdmin
+
 from django_google_search.models import RequestSession, SearchResult
 
 # Register your models here.
@@ -15,8 +17,7 @@ class RequestSessionAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-@admin.register(SearchResult)
-class SearchResult(admin.ModelAdmin):
+class SearchResultAdmin(ExportActionModelAdmin):
     list_display = ['title', 'summary', 'request_session']
 
     def has_add_permission(self, request):
@@ -25,3 +26,4 @@ class SearchResult(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         return False
 
+admin.site.register(SearchResult, SearchResultAdmin)
