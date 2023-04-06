@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 from import_export.admin import ExportActionModelAdmin
+from import_export.resources import ModelResource
+from import_export.fields import Field
 
 from django_google_search.models import RequestSession, SearchResult
 
@@ -17,10 +19,34 @@ class RequestSessionAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
+class SearchResultResource(ModelResource):
+    user = Field()
+    keyword = Field()
+    search_date = Field()
+
+    class Meta:
+        model = SearchResult
+        export_order = [
+            'id', 'url', 'title', 'summary',
+            'request_session', 'user', 'keyword',
+            'search_date'
+        ]
+
+    def dehydrate_user(self, search_result):
+        return search_result.request_session.request_user.username
+
+    def dehydrate_keyword(self, search_result):
+        return search_result.request_session.keyword
+
+    def dehydrate_search_date(self, search_result):
+        return str(search_result.request_session.created)
+
+
 class SearchResultAdmin(ExportActionModelAdmin):
     list_display = ['title', 'summary', 'keyword', 'request_user', 'request_date']
     list_filter = ['request_session__request_user', 'request_session__created']
     search_fields = ['request_session__keyword', 'title', 'summary']
+    resource_class = SearchResultResource
 
     def has_add_permission(self, request):
         return False
