@@ -47,7 +47,11 @@ class RequestSession(models.Model):
     )
 
     def __str__(self):
-        return f"{self.keyword}, {self.date_filter}"
+        text = f"Keyword: {self.keyword}, requested by: {self.request_user}"
+        if self.date_filter:
+            text += f", date filter: {self.date_filter}"
+
+        return text
 
     class Meta:
         verbose_name = _("Request Session")
@@ -84,3 +88,4 @@ class SearchResult(models.Model):
     class Meta:
         verbose_name = _("Search Result")
         verbose_name_plural = _("Search Result List")
+
