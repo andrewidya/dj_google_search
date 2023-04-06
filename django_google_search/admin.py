@@ -18,3 +18,7 @@ class RequestSessionAdmin(admin.ModelAdmin):
 @admin.register(SearchResult)
 class SearchResult(admin.ModelAdmin):
     list_display = ['title', 'summary', 'request_session']
+
+    def has_add_permission(self, request):
+        return False
+
