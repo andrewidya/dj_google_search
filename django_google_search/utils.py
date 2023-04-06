@@ -65,6 +65,10 @@ def search(term: str, num_results: int = 10, lang: str = "en",
 
         for elem in elements:
             link = elem.find("a", href=True)
+
+            if not link:
+                continue
+
             title = link.find("span", attrs={"class": "CVA68e qXLe6d fuLhoc ZWRArf"})
             description = ""
 
