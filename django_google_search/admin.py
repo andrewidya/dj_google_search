@@ -18,6 +18,14 @@ class RequestSessionAdmin(admin.ModelAdmin):
 
         super().save_model(request, obj, form, change)
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+
+        if request.user.is_superuser:
+            return qs
+
+        return qs.filter(request_user=request.user)
+
 
 class SearchResultResource(ModelResource):
     user = Field()
@@ -53,5 +61,13 @@ class SearchResultAdmin(ExportActionModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+
+        if request.user.is_superuser:
+            return qs
+
+        return qs.filter(request_session__request_user=request.user)
 
 admin.site.register(SearchResult, SearchResultAdmin)
